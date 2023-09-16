@@ -1,0 +1,42 @@
+// proto/players.proto
+syntax="proto3";
+
+package proto;
+option go_package="/grpc-ex";
+
+message Player {
+    int64 id = 1;
+    string name = 2;
+    string nationality = 3;
+    string position = 4;
+}
+
+message AddPlayerRequest {
+    Player player =1;
+}
+
+message AddPlayerResponse {
+    Player player = 1;
+}
+
+message GetPlayerRequest {
+    int64 id = 1;
+}
+
+message GetPlayerResponse {
+    Player player = 1;
+}
+
+message DeletePlayerRequest {
+    int64 id = 1;
+}
+
+message DeletePlayerResponse {
+    bool success = 1;
+}
+
+service PlayerService {
+    rpc AddPlayer(AddPlayerRequest) returns (AddPlayerResponse) {}
+    rpc GetPlayer(GetPlayerRequest) returns (GetPlayerResponse) {}
+    rpc DeletePlayer(DeletePlayerRequest) returns (DeletePlayerResponse) {}
+}

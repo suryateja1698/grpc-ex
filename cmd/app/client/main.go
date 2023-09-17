@@ -11,7 +11,6 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// grpc.WithInsecure is deprecated: use WithTransportCredentials and insecure.NewCredentials() instead. Will be supported throughout 1.x.
 func main() {
 	conn, err := grpc.Dial("localhost:8888", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
@@ -25,7 +24,7 @@ func main() {
 		Nationality: "Spain",
 		Position:    "LB",
 	})
-	getPlayer(client,int64(1))
+	getPlayer(client, int64(1))
 }
 
 func getPlayer(client pb.PlayerServiceClient, id int64) {

@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.12
-// source: proto/players.proto
+// source: protos/players.proto
 
-package grpc_ex
+package protos
 
 import (
 	context "context"
@@ -24,7 +24,6 @@ const _ = grpc.SupportPackageIsVersion7
 type PlayerServiceClient interface {
 	AddPlayer(ctx context.Context, in *AddPlayerRequest, opts ...grpc.CallOption) (*AddPlayerResponse, error)
 	GetPlayer(ctx context.Context, in *GetPlayerRequest, opts ...grpc.CallOption) (*GetPlayerResponse, error)
-	DeletePlayer(ctx context.Context, in *DeletePlayerRequest, opts ...grpc.CallOption) (*DeletePlayerResponse, error)
 }
 
 type playerServiceClient struct {
@@ -37,7 +36,7 @@ func NewPlayerServiceClient(cc grpc.ClientConnInterface) PlayerServiceClient {
 
 func (c *playerServiceClient) AddPlayer(ctx context.Context, in *AddPlayerRequest, opts ...grpc.CallOption) (*AddPlayerResponse, error) {
 	out := new(AddPlayerResponse)
-	err := c.cc.Invoke(ctx, "/proto.PlayerService/AddPlayer", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/players.PlayerService/AddPlayer", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,16 +45,7 @@ func (c *playerServiceClient) AddPlayer(ctx context.Context, in *AddPlayerReques
 
 func (c *playerServiceClient) GetPlayer(ctx context.Context, in *GetPlayerRequest, opts ...grpc.CallOption) (*GetPlayerResponse, error) {
 	out := new(GetPlayerResponse)
-	err := c.cc.Invoke(ctx, "/proto.PlayerService/GetPlayer", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *playerServiceClient) DeletePlayer(ctx context.Context, in *DeletePlayerRequest, opts ...grpc.CallOption) (*DeletePlayerResponse, error) {
-	out := new(DeletePlayerResponse)
-	err := c.cc.Invoke(ctx, "/proto.PlayerService/DeletePlayer", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/players.PlayerService/GetPlayer", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +58,6 @@ func (c *playerServiceClient) DeletePlayer(ctx context.Context, in *DeletePlayer
 type PlayerServiceServer interface {
 	AddPlayer(context.Context, *AddPlayerRequest) (*AddPlayerResponse, error)
 	GetPlayer(context.Context, *GetPlayerRequest) (*GetPlayerResponse, error)
-	DeletePlayer(context.Context, *DeletePlayerRequest) (*DeletePlayerResponse, error)
 	mustEmbedUnimplementedPlayerServiceServer()
 }
 
@@ -81,9 +70,6 @@ func (UnimplementedPlayerServiceServer) AddPlayer(context.Context, *AddPlayerReq
 }
 func (UnimplementedPlayerServiceServer) GetPlayer(context.Context, *GetPlayerRequest) (*GetPlayerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPlayer not implemented")
-}
-func (UnimplementedPlayerServiceServer) DeletePlayer(context.Context, *DeletePlayerRequest) (*DeletePlayerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeletePlayer not implemented")
 }
 func (UnimplementedPlayerServiceServer) mustEmbedUnimplementedPlayerServiceServer() {}
 
@@ -108,7 +94,7 @@ func _PlayerService_AddPlayer_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.PlayerService/AddPlayer",
+		FullMethod: "/players.PlayerService/AddPlayer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PlayerServiceServer).AddPlayer(ctx, req.(*AddPlayerRequest))
@@ -126,28 +112,10 @@ func _PlayerService_GetPlayer_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.PlayerService/GetPlayer",
+		FullMethod: "/players.PlayerService/GetPlayer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PlayerServiceServer).GetPlayer(ctx, req.(*GetPlayerRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _PlayerService_DeletePlayer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeletePlayerRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PlayerServiceServer).DeletePlayer(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.PlayerService/DeletePlayer",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PlayerServiceServer).DeletePlayer(ctx, req.(*DeletePlayerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -156,7 +124,7 @@ func _PlayerService_DeletePlayer_Handler(srv interface{}, ctx context.Context, d
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PlayerService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.PlayerService",
+	ServiceName: "players.PlayerService",
 	HandlerType: (*PlayerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -167,11 +135,7 @@ var PlayerService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "GetPlayer",
 			Handler:    _PlayerService_GetPlayer_Handler,
 		},
-		{
-			MethodName: "DeletePlayer",
-			Handler:    _PlayerService_DeletePlayer_Handler,
-		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/players.proto",
+	Metadata: "protos/players.proto",
 }

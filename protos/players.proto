@@ -1,8 +1,8 @@
 // proto/players.proto
 syntax="proto3";
 
-package proto;
-option go_package="/grpc-ex";
+package players;
+option go_package="realmadrid/protos";
 
 message Player {
     int64 id = 1;
@@ -27,16 +27,8 @@ message GetPlayerResponse {
     Player player = 1;
 }
 
-message DeletePlayerRequest {
-    int64 id = 1;
-}
-
-message DeletePlayerResponse {
-    bool success = 1;
-}
 
 service PlayerService {
     rpc AddPlayer(AddPlayerRequest) returns (AddPlayerResponse) {}
     rpc GetPlayer(GetPlayerRequest) returns (GetPlayerResponse) {}
-    rpc DeletePlayer(DeletePlayerRequest) returns (DeletePlayerResponse) {}
-}
+} 
